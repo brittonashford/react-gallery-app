@@ -1,1 +1,1 @@
-# React Gallery App
+## React Gallery App
