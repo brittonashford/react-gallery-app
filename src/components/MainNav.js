@@ -1,16 +1,16 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const MainNav = () => {
     return(
         <nav class="main-nav">
         <ul>
-          <li><a href='#'>Cats</a></li>
-          <li><a href='#'>Dogs</a></li>
-          <li><a href='#'>Computers</a></li>
+          <li><NavLink to="/synthesizers">Synthesizers</NavLink></li>
+          <li><NavLink to="/cats">Cats</NavLink></li>
+          <li><NavLink to="/chanterelles">Chanterelles</NavLink></li>
         </ul>
       </nav>
     )
 }
-
 
 export default MainNav;

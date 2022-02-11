@@ -28,10 +28,13 @@ class App extends Component {
   getPhotos(query) {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
     .then(function (response) {
-        console.log(response);
+        this.setState({        
+          query: query,
+          queryResults: response.data.photos.photo
+        })
     })
     .catch(function(error) {
-      console.log('An error occured processing your request.', error);
+      console.log('An error occurred processing your request.', error);
     })
   }
  
@@ -42,9 +45,9 @@ class App extends Component {
         <SearchForm onSearch={ this.getPhotos } />
         <MainNav />
         <Switch>
-          <Route path="/" render={ () => <Redirect to="/synths" />} />
-          <Route path="/synthesizers" render={ () => <PhotoContainer query="synthesizers" data={ this.state.synths } /> } />
-          <Route path="/cats" render={ () => <PhotoContainer query="cats" data={ this.state.tuxedoCats } /> } />
+          <Route path="/" render={ () => <Redirect to="/synthesizers" />} />
+          <Route path="/synthesizers" render={ () => <PhotoContainer query="synthesizers" data={ this.state.synthesizers } /> } />
+          <Route path="/cats" render={ () => <PhotoContainer query="cats" data={ this.state.cats } /> } />
           <Route path="/chanterelles" render={ () => <PhotoContainer query="chanterelles" data={ this.state.chanterelles } /> } />
           <Route path="/:query" render={ () => <PhotoContainer query={ this.state.query } data={ this.state.queryResults } /> } />
           <Route component={ NotFound } />
