@@ -10,8 +10,8 @@ import apiKey from '../config';
 
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       synthesizers: [],
       cats: [],
@@ -28,10 +28,14 @@ class App extends Component {
   getPhotos(query) {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
     .then(function (response) {
+      console.log(query);  // query = 'cats'
+      console.log(response);  //no issue getting photos from Flickr API...
+      console.log(this.state); // this causes an error: "TypeError: Cannot read properties of undefined (reading 'state')"
         this.setState({        
           query: query,
           queryResults: response.data.photos.photo
-        })
+          })
+      console.log(this.state);
     })
     .catch(function(error) {
       console.log('An error occurred processing your request.', error);
