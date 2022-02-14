@@ -8,4 +8,5 @@ App built with Create React App, React Router, and Axios. Retrieves photos from 
 3. create a file named "config.js" in the src folder of this project. It should contain these two lines of code:
 
 `const apiKey = [insert your API Key here];
+
 export default apiKey;`
