@@ -22,20 +22,29 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.getPhotos('cats');
+    const tagBtns = ["synthesizers", "cats", "chanterelles"];
+    tagBtns.map((tag) => this.getPhotos(tag, true))
+    console.log(this.state.synthesizers);
+    console.log(this.state.cats);
+    console.log(this.state.chanterelles);
   }
 
-  getPhotos(query) {
+  getPhotos(query, isBtn) {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
-    .then(function (response) {
-      console.log(query);  // query = 'cats'
-      console.log(response);  //no issue getting photos from Flickr API...
-      console.log(this.state); // this causes an error: "TypeError: Cannot read properties of undefined (reading 'state')"
-        this.setState({        
+    .then(response => {
+      if(query === 'synthesizers'){
+        this.setState({ synthesizers: response.data.photos.photo })
+      } else if(query === 'cats'){
+        this.setState({ cats: response.data.photos.photo }) 
+      } else if (query === 'chanterelles'){
+        this.setState({ chanterelles: response.data.photos.photo })
+      }else { 
+        this.setState({
           query: query,
           queryResults: response.data.photos.photo
-          })
-      console.log(this.state);
+      })
+    }
+        
     })
     .catch(function(error) {
       console.log('An error occurred processing your request.', error);
@@ -49,11 +58,11 @@ class App extends Component {
         <SearchForm onSearch={ this.getPhotos } />
         <MainNav />
         <Switch>
-          <Route path="/" render={ () => <Redirect to="/synthesizers" />} />
-          <Route path="/synthesizers" render={ () => <PhotoContainer query="synthesizers" data={ this.state.synthesizers } /> } />
-          <Route path="/cats" render={ () => <PhotoContainer query="cats" data={ this.state.cats } /> } />
-          <Route path="/chanterelles" render={ () => <PhotoContainer query="chanterelles" data={ this.state.chanterelles } /> } />
-          <Route path="/:query" render={ () => <PhotoContainer query={ this.state.query } data={ this.state.queryResults } /> } />
+          <Route exact path="/" render={ () => <Redirect to="/synthesizers" />} />
+          <Route path="/synthesizers" render={ () => <PhotoContainer query="synthesizers" queryResults={ this.state.synthesizers } /> } />
+          <Route path="/cats" render={ () => <PhotoContainer query="cats" queryResults={ this.state.cats } /> } />
+          <Route path="/chanterelles" render={ () => <PhotoContainer query="chanterelles" queryResults={ this.state.chanterelles } /> } />
+          <Route path="/:query" render={ () => <PhotoContainer query={ this.state.query } queryResults={ this.state.queryResults } /> } />
           <Route component={ NotFound } />
         </Switch>
 
