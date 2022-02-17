@@ -8,28 +8,29 @@ class PhotoContainer extends Component {
     }
 
     render() {
-        const queryResults = this.props.queryResults;
-        let photos = [];
         const baseUrl = 'https://live.staticflickr.com';
-
-        if (this.props.queryResults){
-            console.log(this.props.query);
-            console.log(this.props.queryResults);
-            photos = queryResults.map(photo =>
-                <Photo photoUrl={`${ baseUrl }/${ photo.server }/${ photo.id }_${ photo.secret }_q.jpg`}
-                    alt={ photo.title }
-                    key={ photo.id }
-                />
-                )
+        const photos = this.props.photos;
+        let gallery = [];
+        
+        if (photos.length > 1){
+            // console.log(this.props.query);
+            // console.log(photos);
+            // console.log(this.props.queryResults);
+            gallery = photos.map(photo =>              
+                <Photo photoUrl={`${baseUrl}/${photo.server}/${photo.id}_${photo.secret}_q.jpg`}
+                    alt={photo.title}
+                    key={photo.id}
+                />             
+            )
         } else {
-            photos = <NotFound />
+            gallery = <NotFound />
         }
 
         return(
             <div class="photo-container">
                 <h2>Results</h2>
                 <ul>
-                    { photos }
+                    {gallery}
                 </ul>
             </div>
         )

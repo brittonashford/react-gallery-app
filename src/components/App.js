@@ -23,28 +23,27 @@ class App extends Component {
 
   componentDidMount() {
     const tagBtns = ["synthesizers", "cats", "chanterelles"];
-    tagBtns.map((tag) => this.getPhotos(tag, true))
-    console.log(this.state.synthesizers);
-    console.log(this.state.cats);
-    console.log(this.state.chanterelles);
+    tagBtns.map((tag) => this.getPhotos(tag))
+    console.log("synth", this.state.synthesizers);
+    console.log("cats", this.state.cats);
+    console.log("chants", this.state.chanterelles);
   }
 
-  getPhotos(query, isBtn) {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
+  getPhotos(tag) {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&per_page=24&format=json&nojsoncallback=1`)
     .then(response => {
-      if(query === 'synthesizers'){
-        this.setState({ synthesizers: response.data.photos.photo })
-      } else if(query === 'cats'){
-        this.setState({ cats: response.data.photos.photo }) 
-      } else if (query === 'chanterelles'){
-        this.setState({ chanterelles: response.data.photos.photo })
+      console.log("axios response", tag, response);
+      console.log("response.data.photos.photo", response.data.photos.photo);
+      this.setState({query: tag})
+      if(tag === 'synthesizers'){
+        this.setState({synthesizers: response.data.photos.photo})
+      } else if(tag === 'cats'){
+        this.setState({cats: response.data.photos.photo}) 
+      } else if (tag === 'chanterelles'){
+        this.setState({chanterelles: response.data.photos.photo})
       }else { 
-        this.setState({
-          query: query,
-          queryResults: response.data.photos.photo
-      })
-    }
-        
+        this.setState({queryResults: response.data.photos.photo})
+      }        
     })
     .catch(function(error) {
       console.log('An error occurred processing your request.', error);
@@ -59,10 +58,10 @@ class App extends Component {
         <MainNav />
         <Switch>
           <Route exact path="/" render={ () => <Redirect to="/synthesizers" />} />
-          <Route path="/synthesizers" render={ () => <PhotoContainer query="synthesizers" queryResults={ this.state.synthesizers } /> } />
-          <Route path="/cats" render={ () => <PhotoContainer query="cats" queryResults={ this.state.cats } /> } />
-          <Route path="/chanterelles" render={ () => <PhotoContainer query="chanterelles" queryResults={ this.state.chanterelles } /> } />
-          <Route path="/:query" render={ () => <PhotoContainer query={ this.state.query } queryResults={ this.state.queryResults } /> } />
+          <Route path="/synthesizers" render={ () => <PhotoContainer photos={ this.state.synthesizers } /> } />
+          <Route path="/cats" render={ () => <PhotoContainer photos={ this.state.cats } /> } />
+          <Route path="/chanterelles" render={ () => <PhotoContainer photos={ this.state.chanterelles } /> } />
+          <Route path="/:query" render={ () => <PhotoContainer photos={ this.state.queryResults } /> } />
           <Route component={ NotFound } />
         </Switch>
 
