@@ -54,15 +54,15 @@ class App extends Component {
   render(){
     return (
       <div className="container">
-        <SearchForm onSearch={ this.getPhotos } />
+        <SearchForm onSearch={this.getPhotos} />
         <MainNav />
         <Switch>
-          <Route exact path="/" render={ () => <Redirect to="/synthesizers" />} />
-          <Route path="/synthesizers" render={ () => <PhotoContainer photos={ this.state.synthesizers } /> } />
-          <Route path="/cats" render={ () => <PhotoContainer photos={ this.state.cats } /> } />
-          <Route path="/chanterelles" render={ () => <PhotoContainer photos={ this.state.chanterelles } /> } />
-          <Route path="/:query" render={ () => <PhotoContainer photos={ this.state.queryResults } /> } />
-          <Route component={ NotFound } />
+          <Route exact path="/" render={() => <Redirect to="/synthesizers" />} />
+          <Route path="/synthesizers" render={() => <PhotoContainer photos={this.state.synthesizers} />} />
+          <Route path="/cats" render={() => <PhotoContainer photos={this.state.cats} />} />
+          <Route path="/chanterelles" render={() => <PhotoContainer photos={this.state.chanterelles} />} />
+          <Route path="/:query" render={() => <PhotoContainer photos={this.state.queryResults} />} />
+          <Route component={NotFound} />
         </Switch>
 
       </div>

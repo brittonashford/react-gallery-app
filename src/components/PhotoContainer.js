@@ -12,7 +12,7 @@ class PhotoContainer extends Component {
         const photos = this.props.photos;
         let gallery = [];
         
-        if (photos.length > 1){
+        if (photos.length > 0){
             // console.log(this.props.query);
             // console.log(photos);
             // console.log(this.props.queryResults);
