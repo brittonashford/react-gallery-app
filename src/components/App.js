@@ -13,20 +13,17 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      synthesizers: [],
       cats: [],
-      chanterelles: [],
+      dogs: [],
+      birds: [],
       query: '',
       queryResults: []
     };
   }
 
   componentDidMount() {
-    const tagBtns = ["synthesizers", "cats", "chanterelles"];
+    const tagBtns = ["cats", "dogs", "birds"];
     tagBtns.map((tag) => this.getPhotos(tag))
-    console.log("synth", this.state.synthesizers);
-    console.log("cats", this.state.cats);
-    console.log("chants", this.state.chanterelles);
   }
 
   getPhotos(tag) {
@@ -34,15 +31,20 @@ class App extends Component {
     .then(response => {
       console.log("axios response", tag, response);
       console.log("response.data.photos.photo", response.data.photos.photo);
-      this.setState({query: tag})
-      if(tag === 'synthesizers'){
-        this.setState({synthesizers: response.data.photos.photo})
-      } else if(tag === 'cats'){
-        this.setState({cats: response.data.photos.photo}) 
-      } else if (tag === 'chanterelles'){
-        this.setState({chanterelles: response.data.photos.photo})
+      this.setState({query: tag}) //setState DOES NOT work here
+      if(tag === 'cats'){
+        this.setState({cats: response.data.photos.photo}) //setState works here
+        console.log("state set for cats");
+      } else if(tag === 'dogs'){
+        this.setState({dogs: response.data.photos.photo}) //setState works here
+        console.log("state set for dogs")
+      } else if (tag === 'birds'){
+        this.setState({birds: response.data.photos.photo}) //setState works here
+        console.log("state set for birds")
       }else { 
-        this.setState({queryResults: response.data.photos.photo})
+        this.setState({queryResults: response.data.photos.photo}) //setState DOES NOT work here
+        console.log("State set for query!", `tag: ${tag}`);
+        console.log(`queryResults: ${this.state.queryResults}`)
       }        
     })
     .catch(function(error) {
@@ -57,10 +59,10 @@ class App extends Component {
         <SearchForm onSearch={this.getPhotos} />
         <MainNav />
         <Switch>
-          <Route exact path="/" render={() => <Redirect to="/synthesizers" />} />
-          <Route path="/synthesizers" render={() => <PhotoContainer photos={this.state.synthesizers} />} />
+          <Route exact path="/" render={() => <Redirect to="/cats" />} />
           <Route path="/cats" render={() => <PhotoContainer photos={this.state.cats} />} />
-          <Route path="/chanterelles" render={() => <PhotoContainer photos={this.state.chanterelles} />} />
+          <Route path="/dogs" render={() => <PhotoContainer photos={this.state.dogs} />} />
+          <Route path="/birds" render={() => <PhotoContainer photos={this.state.birds} />} />
           <Route path="/:query" render={() => <PhotoContainer photos={this.state.queryResults} />} />
           <Route component={NotFound} />
         </Switch>

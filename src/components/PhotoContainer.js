@@ -13,9 +13,6 @@ class PhotoContainer extends Component {
         let gallery = [];
         
         if (photos.length > 0){
-            // console.log(this.props.query);
-            // console.log(photos);
-            // console.log(this.props.queryResults);
             gallery = photos.map(photo =>              
                 <Photo photoUrl={`${baseUrl}/${photo.server}/${photo.id}_${photo.secret}_q.jpg`}
                     alt={photo.title}
