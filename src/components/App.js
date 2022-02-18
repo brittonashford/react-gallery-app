@@ -17,7 +17,8 @@ class App extends Component {
       dogs: [],
       birds: [],
       query: '',
-      queryResults: []
+      queryResults: [],
+      isLoading: true
     };
   }
 
@@ -26,26 +27,25 @@ class App extends Component {
     tagBtns.map((tag) => this.getPhotos(tag))
   }
 
-  getPhotos(tag) {
+  isLoading = bool => {
+    this.setState({isLoading: bool})
+  }
+
+  getPhotos =tag => {
+    this.isLoading(true);
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&per_page=24&format=json&nojsoncallback=1`)
     .then(response => {
-      console.log("axios response", tag, response);
-      console.log("response.data.photos.photo", response.data.photos.photo);
       this.setState({query: tag}) //setState DOES NOT work here
       if(tag === 'cats'){
         this.setState({cats: response.data.photos.photo}) //setState works here
-        console.log("state set for cats");
       } else if(tag === 'dogs'){
         this.setState({dogs: response.data.photos.photo}) //setState works here
-        console.log("state set for dogs")
       } else if (tag === 'birds'){
         this.setState({birds: response.data.photos.photo}) //setState works here
-        console.log("state set for birds")
       }else { 
         this.setState({queryResults: response.data.photos.photo}) //setState DOES NOT work here
-        console.log("State set for query!", `tag: ${tag}`);
-        console.log(`queryResults: ${this.state.queryResults}`)
-      }        
+      } 
+      this.isLoading(false);       
     })
     .catch(function(error) {
       console.log('An error occurred processing your request.', error);
@@ -58,15 +58,19 @@ class App extends Component {
       <div className="container">
         <SearchForm onSearch={this.getPhotos} />
         <MainNav />
-        <Switch>
-          <Route exact path="/" render={() => <Redirect to="/cats" />} />
-          <Route path="/cats" render={() => <PhotoContainer photos={this.state.cats} />} />
-          <Route path="/dogs" render={() => <PhotoContainer photos={this.state.dogs} />} />
-          <Route path="/birds" render={() => <PhotoContainer photos={this.state.birds} />} />
-          <Route path="/:query" render={() => <PhotoContainer photos={this.state.queryResults} />} />
-          <Route component={NotFound} />
-        </Switch>
-
+        {
+          (this.state.isLoading) ? <h2>Loading Images....</h2> :
+          (
+            <Switch>
+              <Route exact path="/" render={() => <Redirect to="/cats" />} />
+              <Route path="/cats" render={() => <PhotoContainer photos={this.state.cats} />} />
+              <Route path="/dogs" render={() => <PhotoContainer photos={this.state.dogs} />} />
+              <Route path="/birds" render={() => <PhotoContainer photos={this.state.birds} />} />
+              <Route path="/:query" render={() => <PhotoContainer photos={this.state.queryResults} />} />
+              <Route component={NotFound} />
+            </Switch>
+        )
+      }
       </div>
     );
   }
